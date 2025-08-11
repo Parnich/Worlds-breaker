@@ -14,3 +14,6 @@ The application uses hash maps to real time generation,which speeds up its work 
 
 ## Interface 
 The application has a window interface, 600 by 400, and also has functions for switching encryption of Russian, English and every fourth letter
+
+
+![Application](https://github.com/user-attachments/assets/7c025405-be92-4bd5-898f-5f33228898af)
