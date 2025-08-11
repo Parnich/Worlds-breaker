@@ -1,7 +1,7 @@
 # Worlds-breaker
 An application that breaks English and Russian words (and sentences!) by inverting alphabets and registers, has decryption functions.
 
-The application uses hash maps to real time generation,which speeds up its work many times over 
+The application uses hash maps to real time generation,which speeds up its work many times over. each Russian letter changes to the corresponding English one, and vice versa. in addition, the case of letters also changes.
 
 ## Dependencies/required imports
 >javax.swing.*;
