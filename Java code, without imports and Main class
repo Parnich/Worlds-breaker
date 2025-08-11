@@ -1,9 +1,4 @@
-import javax.swing.*;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-
-public class Break {
+public class ... {
     private static final Map<Character, Character> rusToEng = new HashMap<>();
     private static final Map<Character, Character> engToRus = new HashMap<>();
 
