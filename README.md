@@ -5,8 +5,11 @@ The application uses hash maps to real time generation,which speeds up its work 
 
 ## Dependencies/required imports
 >javax.swing.*;
+
 >java.awt.*;
+
 >java.util.HashMap;
+
 >java.util.Map;
 
 ## Interface 
