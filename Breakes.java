@@ -1,0 +1,118 @@
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Break {
+    private static final Map<Character, Character> rusToEng = new HashMap<>();
+    private static final Map<Character, Character> engToRus = new HashMap<>();
+
+    private static final Map<Integer, Character> replacedChars = new HashMap<>();
+
+    public static void main(String[] args) {
+        initDictionaries();
+
+        JFrame frame = new JFrame("Parnich's worlds breaker");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
+        frame.setLayout(new BorderLayout());
+
+        JTextArea inputArea = new JTextArea(5, 50);
+        JScrollPane inputScroll = new JScrollPane(inputArea);
+        inputScroll.setBorder(BorderFactory.createTitledBorder("input text"));
+
+        JTextArea outputArea = new JTextArea(5, 50);
+        outputArea.setEditable(false);
+        JScrollPane outputScroll = new JScrollPane(outputArea);
+        outputScroll.setBorder(BorderFactory.createTitledBorder("result"));
+
+        JCheckBox cbRusToEng = new JCheckBox("ru → en", true);
+        JCheckBox cbEngToRus = new JCheckBox("en → ru", true);
+        JCheckBox cbReplaceEvery4th = new JCheckBox("every 4 letter → #", true);
+
+        JPanel optionsPanel = new JPanel();
+        optionsPanel.add(cbRusToEng);
+        optionsPanel.add(cbEngToRus);
+        optionsPanel.add(cbReplaceEvery4th);
+
+        JButton encryptButton = new JButton("Encrypt");
+        JButton decryptButton = new JButton("Decipher");
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(encryptButton);
+        buttonPanel.add(decryptButton);
+
+        encryptButton.addActionListener(e -> {
+            replacedChars.clear();
+            String text = inputArea.getText();
+            StringBuilder result = new StringBuilder();
+            int letterCount = 0;
+
+            for (int i = 0; i < text.length(); i++) {
+                char c = text.charAt(i);
+                char newChar = c;
+                boolean replaced = false;
+
+                if (cbRusToEng.isSelected() && rusToEng.containsKey(c)) {
+                    newChar = rusToEng.get(c);
+                    letterCount++;
+                } else if (cbEngToRus.isSelected() && engToRus.containsKey(c)) {
+                    newChar = engToRus.get(c);
+                    letterCount++;
+                } else if (Character.isLetter(c)) {
+                    letterCount++;
+                }
+
+                if (cbReplaceEvery4th.isSelected() && letterCount > 0 && letterCount % 4 == 0 && Character.isLetter(newChar)) {
+                    replacedChars.put(result.length(), newChar);
+                    newChar = '#';
+                    replaced = true;
+                }
+
+                result.append(newChar);
+            }
+            outputArea.setText(result.toString());
+        });
+
+        decryptButton.addActionListener(e -> {
+            String encrypted = inputArea.getText();
+            StringBuilder result = new StringBuilder();
+
+            for (int i = 0; i < encrypted.length(); i++) {
+                char c = encrypted.charAt(i);
+                if (c == '#' && replacedChars.containsKey(i)) {
+                    result.append(replacedChars.get(i));
+                } else {
+                    result.append(c);
+                }
+            }
+            outputArea.setText(result.toString());
+        });
+
+        frame.add(inputScroll, BorderLayout.NORTH);
+        frame.add(optionsPanel, BorderLayout.CENTER);
+        frame.add(buttonPanel, BorderLayout.EAST);
+        frame.add(outputScroll, BorderLayout.SOUTH);
+
+        frame.setVisible(true);
+    }
+
+    private static void initDictionaries() {
+        char[] rusLower = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя".toCharArray();
+        char[] rusUpper = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ".toCharArray();
+        char[] engLower = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        char[] engUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+
+        for (int i = 0; i < rusLower.length; i++) {
+            if (i < engUpper.length) {
+                rusToEng.put(rusLower[i], engUpper[i]);
+                rusToEng.put(rusUpper[i], engLower[i]);
+                engToRus.put(engUpper[i], rusLower[i]);
+                engToRus.put(engLower[i], rusUpper[i]);
+            } else {
+                rusToEng.put(rusLower[i], '?');
+                rusToEng.put(rusUpper[i], '?');
+            }
+        }
+    }
+}
